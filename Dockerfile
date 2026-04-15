@@ -61,23 +61,18 @@ RUN set -eu && \
     tar -C /usr/local/node -xf nodetmpfs.${NODE_SOURCE_FORMAT} --strip-components=1 && \
     # Assemble welcome message
     ALPINE_ACTUAL_VERSION=$(grep VERSION_ID /etc/os-release | cut -d'=' -f2) && \
-    NODE_ACTUAL_VERSION=$(/usr/local/node/bin/node -v | cut -d'v' -f2) && \
-    # Create symbolic links for node commands
+    ## Create symbolic links (required by node and npm)
     ln -sf /usr/local/node/bin/node /usr/local/bin/node && \
-    ls -l /usr/local/node/bin/npm && \
-    /usr/local/node/bin/npm -v && \
-    echo "hello2 - ${NODE_ACTUAL_VERSION}" && \
-    NPM_ACTUAL_VERSION=$(/usr/local/node/bin/npm -v) && \
-    echo "hello3 - ${NPM_ACTUAL_VERSION}" && \
+    ln -sf /usr/local/node/bin/npm /usr/local/bin/npm && \
+    NODE_ACTUAL_VERSION=$(node -v | cut -d'v' -f2) && \
+    NPM_ACTUAL_VERSION=$(npm -v) && \
     echo -e "\
 Welcome to Alpine Linux ${ALPINE_ACTUAL_VERSION} on Docker !\n\
 Node.js version: ${NODE_ACTUAL_VERSION}, NPM version: ${NPM_ACTUAL_VERSION}" > /etc/motd && \
-    echo "hello4 - ${NPM_ACTUAL_VERSION}" && \
     # Remove temp file
     rm -rf nodetmpfs.${NODE_SOURCE_FORMAT} && \
     # Uninstall temp dependencies
-    apk del curl libstdc++ && \
-    echo "hello5 - ${NPM_ACTUAL_VERSION}"
+    apk del curl libstdc++
 
 #
 # Stage 2 : production
@@ -107,7 +102,7 @@ LABEL maintainer="Len <lentiancn@126.com>" \
 # Copy resources
 #
 # Reset welcome message
-COPY --from=builder /etc/motd /etc/motd
+COPY --from=builder /etc/motd /etc/
 # Install node home
 COPY --from=builder /usr/local/node /usr/local/
 
@@ -117,7 +112,7 @@ COPY --from=builder /usr/local/node /usr/local/
 RUN set -eu && \
     # Install dependencies
     apk add --no-cache libstdc++ && \
-    # Create symbolic links for node commands
+    # Create symbolic links
     ln -sf /usr/local/node/bin/node /usr/local/bin/node && \
     ln -sf /usr/local/node/bin/npm /usr/local/bin/npm && \
     ln -sf /usr/local/node/bin/npx /usr/local/bin/npx
