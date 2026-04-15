@@ -1,7 +1,7 @@
 # Node.js on Docker
 
 [![MIT License](https://img.shields.io/github/license/lentiancn/docker-gentkit-node?style=flat-square)](LICENSE)
-[![GitHub Release](https://img.shields.io/github/tag/lentiancn/docker-gentkit-node.svg?label=release)](https://github.com/lentiancn/docker-gentkit-node/releases)
+[![GitHub Release](https://img.shields.io/github/tag/lentiancn/docker-gentkit-node.svg?style=flat-square&sort=date&label=Release)](https://github.com/lentiancn/docker-gentkit-node/releases)
 
 A project for building Docker image for the Node.js environment.
 
