@@ -62,7 +62,8 @@ RUN set -eu && \
     # Assemble welcome message
     ALPINE_ACTUAL_VERSION=$(grep VERSION_ID /etc/os-release | cut -d'=' -f2) && \
     NODE_ACTUAL_VERSION=$(/usr/local/node/bin/node -v | cut -d'v' -f2) && \
-    PATH = /usr/local/node/bin:$PATH && \
+    # Create symbolic links for node commands
+    ln -sf /usr/local/node/bin/node /usr/local/bin/node && \
     ls -l /usr/local/node/bin/npm && \
     /usr/local/node/bin/npm -v && \
     echo "hello2 - ${NODE_ACTUAL_VERSION}" && \
