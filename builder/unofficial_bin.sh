@@ -8,7 +8,7 @@ set -e
 
 echo "NODE_URL= ${NODE_URL}"
 
-curl -fsSL "${NODE_URL}" -o /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
+curl -fsSL "${NODE_URL}" -o /tmp/nodetmpfs.${NODE_SOURCE_FORMAT}
 
 # Extract files to node home \
-tar -C /usr/local/node -xf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} --strip-components=1 && \
+tar -C /usr/local/node -xf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} --strip-components=1
