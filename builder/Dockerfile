@@ -20,12 +20,21 @@ ARG NODE_SOURCE="official_bin"
 ## Node source path, example "download/release/v24.14.1/node-v24.14.1-linux-x64-musl.tar.xz"
 ARG NODE_SOURCE_PATH="unknown"
 
+COPY --chmod=755 unofficial_bin.sh /
+
 #
 # Prepare node
 #
 RUN set -eu && \
     # Download node installation package \
     apk add --no-cache curl libstdc++ && \
+    # Create node home \
+    mkdir -p /usr/local/node && \
+    NODE_SOURCE_FORMAT=$(echo "${NODE_SOURCE_PATH}" | awk -F/ '{print $NF}' | grep -oE '\.(tar\.gz|tar\.xz)$' | cut -c2-) && \
+    if [ -z "${NODE_SOURCE_FORMAT}" ]; then \
+        echo "Error: NODE_SOURCE_PATH must end with .tar.gz or .tar.xz, got '${NODE_SOURCE_PATH}'" >&2; \
+        exit 1; \
+    fi && \
     case "${NODE_SOURCE}" in \
             official_bin) \
                 NODE_URL="https://nodejs.org/${NODE_SOURCE_PATH}" \
@@ -36,6 +45,7 @@ RUN set -eu && \
                 ;; \
             unofficial_bin) \
                 NODE_URL="https://unofficial-builds.nodejs.org/${NODE_SOURCE_PATH}" \
+                /unofficial_bin.sh \
                 ;; \
             unofficial_src) \
                 echo "Error: NODE_SOURCE 'unofficial_src' is not supported. Please use 'official_bin' or 'unofficial_bin'" >&2; \
@@ -46,17 +56,10 @@ RUN set -eu && \
             exit 1 \
             ;; \
     esac && \
-    NODE_SOURCE_FORMAT=$(echo "${NODE_SOURCE_PATH}" | awk -F/ '{print $NF}' | grep -oE '\.(tar\.gz|tar\.xz)$' | cut -c2-) && \
-    if [ -z "${NODE_SOURCE_FORMAT}" ]; then \
-        echo "Error: NODE_SOURCE_PATH must end with .tar.gz or .tar.xz, got '${NODE_SOURCE_PATH}'" >&2; \
-        exit 1; \
-    fi && \
-    curl -fsSL "${NODE_URL}" -o /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
-    # Create node home \
-    mkdir -p /usr/local/node && \
-    # Extract files to node home \
-    tar -C /usr/local/node -xf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} --strip-components=1 && \
-    ## Create symbolic links \
+#    curl -fsSL "${NODE_URL}" -o /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
+#    # Extract files to node home \
+#    tar -C /usr/local/node -xf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} --strip-components=1 && \
+    # Create symbolic links \
     ln -sf /usr/local/node/bin/node /usr/local/bin/node && \
     ln -sf /usr/local/node/bin/npm /usr/local/bin/npm && \
     ln -sf /usr/local/node/bin/npx /usr/local/bin/npx && \
