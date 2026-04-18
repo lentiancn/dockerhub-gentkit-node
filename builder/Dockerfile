@@ -41,9 +41,9 @@ RUN set -eu && \
                 sh /official_bin.sh \
                 ;; \
             official_src) \
-    echo "2" && sleep 10 && \
+    echo "2" && sleep 10 \
                 sh /official_src.sh \
-    echo "3" && sleep 10 && \
+    echo "3" && sleep 10 \
                 ;; \
             unofficial_bin) \
                 sh /unofficial_bin.sh \
@@ -75,4 +75,4 @@ Node.js version: ${NODE_VERSION}, NPM version: ${NPM_VERSION}" > /etc/motd && \
     # Remove temp file \
     rm -rf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
     # Uninstall temp dependencies \
-    apk del curl libstdc++ python3 py3-pip g++ make
+    apk del curl libstdc++ python3 py3-pip g++ make linux-headers
