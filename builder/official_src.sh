@@ -5,7 +5,7 @@
 # https://github.com/lentiancn/docker-gentkit-node/blob/main/LICENSE
 #
 set -e
-
+echo "build start!!!..."
 NODE_URL="https://nodejs.org/${NODE_SOURCE_PATH}"
 INSTALL_PREFIX="/usr/local/node"
 
@@ -38,3 +38,6 @@ ldconfig
 cd ~
 rm -rf /tmp/nodetmpfs
 rm -rf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT}
+
+echo "build ready!!!..."
+SLEEP 20
