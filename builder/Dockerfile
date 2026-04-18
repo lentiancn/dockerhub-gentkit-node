@@ -25,7 +25,7 @@ ARG NODE_SOURCE_PATH="unknown"
 #
 RUN set -eu && \
     # Download node installation package \
-    apk add --no-cache curl libstdc++ musl-dbg && \
+    apk add --no-cache curl libstdc++ && \
     case "${NODE_SOURCE}" in \
             official_bin) \
                 NODE_URL="https://nodejs.org/${NODE_SOURCE_PATH}" \
