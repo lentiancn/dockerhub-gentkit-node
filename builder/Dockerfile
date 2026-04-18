@@ -41,9 +41,11 @@ RUN set -eu && \
                 sh /official_bin.sh \
                 ;; \
             official_src) \
-    echo "2" && sleep 10 \
+    echo "2" \
+    sleep 10 \
                 sh /official_src.sh \
-    echo "3" && sleep 10 \
+    sleep 10 \
+    echo "3" \
                 ;; \
             unofficial_bin) \
                 sh /unofficial_bin.sh \
