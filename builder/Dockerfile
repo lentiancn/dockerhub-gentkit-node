@@ -45,7 +45,6 @@ RUN set -eu && \
                 ;; \
             unofficial_bin) \
                 NODE_URL="https://unofficial-builds.nodejs.org/${NODE_SOURCE_PATH}" \
-                chmod +x /unofficial_bin.sh && \
                 sh /unofficial_bin.sh \
                 ;; \
             unofficial_src) \
