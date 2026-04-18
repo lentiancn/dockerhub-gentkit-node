@@ -8,15 +8,15 @@
 # Stage 1 : builder
 #
 # Use 'gentkit/alpine' as the base image with specified version
-# NOTE: If it is "unknown", cause the 'gentkit/alpine' base image to fail the build to ensure the correct version is referenced.
+# NOTE : If ALPINE_IMAGE_TAG is "unknown", cause the 'gentkit/alpine' base image to fail the build to ensure the correct version is referenced.
 #
-ARG ALPINE_IMAGE_VERSION="unknown"
-FROM gentkit/alpine:${ALPINE_IMAGE_VERSION} AS builder
+ARG ALPINE_IMAGE_TAG="unknown"
+FROM gentkit/alpine:${ALPINE_IMAGE_TAG} AS builder
 
 #
 # Define build arguments for image metadata
 #
-ARG ALPINE_IMAGE_VERSION="unknown"
+ARG ALPINE_IMAGE_TAG="unknown"
 ## Node source, optional: official_bin (default), official_src, unofficial_bin, unofficial_src
 ARG NODE_SOURCE="official_bin"
 ## Node source path, example "download/release/v24.14.1/node-v24.14.1-linux-x64-musl.tar.xz"
@@ -32,10 +32,10 @@ RUN set -eu && \
     apk add --no-cache curl libstdc++ && \
     case "${NODE_SOURCE}" in \
             official_bin) \
-                NODE_URL="https://nodejs.org/dist/${NODE_SOURCE_PATH}" \
+                NODE_URL="https://nodejs.org/${NODE_SOURCE_PATH}" \
                 ;; \
             official_src) \
-                NODE_URL="https://nodejs.org/dist/${NODE_SOURCE_PATH}" \
+                NODE_URL="https://nodejs.org/${NODE_SOURCE_PATH}" \
                 ;; \
             unofficial_bin) \
                 NODE_URL="https://unofficial-builds.nodejs.org/${NODE_SOURCE_PATH}" \
@@ -54,16 +54,24 @@ RUN set -eu && \
     mkdir -p /usr/local/node && \
     # Extract files to node home \
     tar -C /usr/local/node -xf nodetmpfs.${NODE_SOURCE_FORMAT} --strip-components=1 && \
-    # Assemble welcome message \
-    ALPINE_ACTUAL_VERSION=$(grep VERSION_ID /etc/os-release | cut -d'=' -f2) && \
-    ## Create symbolic links (required by node and npm) \
+    ## Create symbolic links \
     ln -sf /usr/local/node/bin/node /usr/local/bin/node && \
     ln -sf /usr/local/node/bin/npm /usr/local/bin/npm && \
-    NODE_ACTUAL_VERSION=$(node -v | cut -d'v' -f2) && \
-    NPM_ACTUAL_VERSION=$(npm -v) && \
+    ln -sf /usr/local/node/bin/npx /usr/local/bin/npx && \
+    # Assemble welcome message \
+    ALPINE_VERSION=$(grep VERSION_ID /etc/os-release | cut -d'=' -f2) && \
+    NODE_VERSION=$(node -v | cut -d'v' -f2) && \
+    NPM_VERSION=$(npm -v) && \
     echo -e "\
-Welcome to Alpine Linux ${ALPINE_ACTUAL_VERSION} on Docker !\n\
-Node.js version: ${NODE_ACTUAL_VERSION}, NPM version: ${NPM_ACTUAL_VERSION}" > /etc/motd && \
+Welcome to Alpine Linux ${ALPINE_VERSION} on Docker !\n\
+Node.js version: ${NODE_VERSION}, NPM version: ${NPM_VERSION}" > /etc/motd && \
+    # Create node filesystem \
+    tar -czf /nodefs.tar.gz \
+        -C / usr/local/node \
+        -C / usr/local/bin/node \
+        -C / usr/local/bin/npm \
+        -C / usr/local/bin/npx \
+        -C / etc/motd && \
     # Remove temp file \
     rm -rf nodetmpfs.${NODE_SOURCE_FORMAT} && \
     # Uninstall temp dependencies \
@@ -72,34 +80,12 @@ Node.js version: ${NODE_ACTUAL_VERSION}, NPM version: ${NPM_ACTUAL_VERSION}" > /
 #
 # Stage 2 : production
 #
-FROM gentkit/alpine:${ALPINE_IMAGE_VERSION} AS production
-
-#
-# Define build arguments for image metadata
-#
-ARG NODE_IMAGE_VERSION="unknown"
-ARG IMAGE_BUILD_DATE="unknown"
-
-#
-# Image metadata labels following OCI Image Format Specification
-#
-LABEL maintainer="Len <lentiancn@126.com>" \
-      description="A Docker image for the Node.js environment." \
-      org.opencontainers.image.title="Node.js on Docker" \
-      org.opencontainers.image.description="A Docker image for the Node.js environment." \
-      org.opencontainers.image.vendor="GentKit" \
-      org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.source="https://github.com/lentiancn/docker-gentkit-node" \
-      org.opencontainers.image.version="${NODE_IMAGE_VERSION}" \
-      org.opencontainers.image.created="${IMAGE_BUILD_DATE}"
+FROM gentkit/alpine:${ALPINE_IMAGE_TAG} AS production
 
 #
 # Copy resources
 #
-# Reset welcome message
-COPY --from=builder /etc/motd /etc/motd
-# Install node home
-COPY --from=builder /usr/local/node /usr/local/node
+ADD --from=builder /nodefs.tar.gz /
 
 #
 # Configure node
@@ -107,7 +93,3 @@ COPY --from=builder /usr/local/node /usr/local/node
 RUN set -eu && \
     # Install dependencies \
     apk add --no-cache libstdc++ && \
-    # Create symbolic links \
-    ln -sf /usr/local/node/bin/node /usr/local/bin/node && \
-    ln -sf /usr/local/node/bin/npm /usr/local/bin/npm && \
-    ln -sf /usr/local/node/bin/npx /usr/local/bin/npx
