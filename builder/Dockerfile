@@ -29,7 +29,7 @@ COPY --chmod=755 unofficial_bin.sh /
 #
 RUN set -eu && \
     # Download node installation package \
-    apk add --no-cache curl libstdc++ && \
+    apk add --no-cache curl libstdc++ python3 py3-pip g++ make && \
     NODE_SOURCE_FORMAT=$(echo "${NODE_SOURCE_PATH}" | awk -F/ '{print $NF}' | grep -oE '\.(tar\.gz|tar\.xz)$' | cut -c2-) && \
     if [ -z "${NODE_SOURCE_FORMAT}" ]; then \
         echo "Error: NODE_SOURCE_PATH must end with .tar.gz or .tar.xz, got '${NODE_SOURCE_PATH}'" >&2; \
@@ -71,4 +71,4 @@ Node.js version: ${NODE_VERSION}, NPM version: ${NPM_VERSION}" > /etc/motd && \
     # Remove temp file \
     rm -rf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
     # Uninstall temp dependencies \
-    apk del curl libstdc++
+    apk del curl libstdc++ python3 py3-pip g++ make
