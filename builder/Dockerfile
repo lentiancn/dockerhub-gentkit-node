@@ -62,7 +62,7 @@ RUN set -eu && \
 Welcome to Alpine Linux ${ALPINE_VERSION} on Docker !\n\
 Node.js version: ${NODE_VERSION}, NPM version: ${NPM_VERSION}" > /etc/motd && \
     # Create node filesystem \
-    tar -czf /nodefs.tar.gz \
+    tar -czf /distfs.tar.gz \
         -C / usr/local/node \
         -C / usr/local/bin/node \
         -C / usr/local/bin/npm \
