@@ -7,23 +7,27 @@ A project for building Docker image for the Node.js environment .
 
 ## Tag naming convention
 
-### LTS version
+### Node.js from https://nodejs.org/
 
-| Image        | Tag                    | Description                                                                                                                     |
-|--------------|------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| gentkit/node | ltsX.Y.Z-alpine        | Node.js vX.Y.Z(LTS) from https://nodejs.org/ based on Alpine Linux (gentkit/alpine:latest)                                      |
-| gentkit/node | ltslatest-alpine       | Current Node.js LTS version from https://nodejs.org/ based on Alpine Linux (gentkit/alpine:latest)                              |
-| gentkit/node | unoff-ltsX.Y.Z-alpine  | Unofficial Node.js vX.Y.Z(LTS) from https://unofficial-builds.nodejs.org/ based on Alpine Linux (gentkit/alpine:latest)         |
-| gentkit/node | unoff-ltslatest-alpine | Unofficial current Node.js LTS version from https://unofficial-builds.nodejs.org/ based on Alpine Linux (gentkit/alpine:latest) |
+| Image        | Tag             | Description                                                  |
+|--------------|-----------------|--------------------------------------------------------------|
+| gentkit/node | latest          | Same with **gentkit/node:latest-alpine**                     |
+| gentkit/node | latest-alpine   | Node.js vX.Y.Z(LTS/non-LTS) based on the latest Alpine Linux |
+| gentkit/node | ltsX-alpine     | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
+| gentkit/node | ltsX.Y.Z-alpine | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
+| gentkit/node | X-alpine        | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
+| gentkit/node | X.Y.Z-alpine    | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
 
-### non-LTS version
+### Unofficial Node.js from https://unofficial-builds.nodejs.org/
 
-| Image        | Tag                 | Description                                                                                                                 |
-|--------------|---------------------|-----------------------------------------------------------------------------------------------------------------------------|
-| gentkit/node | X.Y.Z-alpine        | Node.js vX.Y.Z from https://nodejs.org/ based on Alpine Linux (gentkit/alpine:latest)                                       |
-| gentkit/node | latest-alpine       | Current Node.js version from https://nodejs.org/ based on Alpine Linux (gentkit/alpine:latest)                              |
-| gentkit/node | unoff-X.Y.Z-alpine  | Unofficial Node.js vX.Y.Z from https://unofficial-builds.nodejs.org/ based on Alpine Linux (gentkit/alpine:latest)          |
-| gentkit/node | unoff-latest-alpine | Unofficial current Node.js version from https://unofficial-builds.nodejs.org/ based on Alpine Linux (gentkit/alpine:latest) |
+| Image        | Tag                   | Description                                                  |
+|--------------|-----------------------|--------------------------------------------------------------|
+| gentkit/node | unoff-latest          | Same with **gentkit/node:unoff-latest-alpine**               |
+| gentkit/node | unoff-latest-alpine   | Node.js vX.Y.Z(LTS/non-LTS) based on the latest Alpine Linux |
+| gentkit/node | unoff-ltsX-alpine     | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
+| gentkit/node | unoff-ltsX.Y.Z-alpine | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
+| gentkit/node | unoff-X-alpine        | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
+| gentkit/node | unoff-X.Y.Z-alpine    | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
 
 ## Pull and run into a new container
 
