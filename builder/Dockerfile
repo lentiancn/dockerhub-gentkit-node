@@ -67,16 +67,18 @@ RUN set -eu && \
     echo -e "\
 Welcome to Alpine Linux ${ALPINE_VERSION} on Docker !\n\
 Node.js version: ${NODE_VERSION}, NPM version: ${NPM_VERSION}" > /etc/motd && \
+    # Create node compile cache directory \
+    mkdir -p /var/tmp/openclaw-compile-cache && \
+    # Remove default cache directory \
+    rm -rf /tmp/node-compile-cache && \
+    # Remove temp file \
+    rm -rf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
+    # Uninstall temp dependencies \
+    apk del curl libstdc++ python3 py3-pip g++ make linux-headers && \
     # Create node filesystem \
     tar -czf /distfs.tar.gz \
         -C / usr/local/node \
         -C / usr/local/bin/node \
         -C / usr/local/bin/npm \
         -C / usr/local/bin/npx \
-        -C / etc/motd && \
-    # Remove temp file \
-    rm -rf /tmp/nodetmpfs.${NODE_SOURCE_FORMAT} && \
-    # Remove default cache directory \
-    rm -rf /tmp/node-compile-cache && \
-    # Uninstall temp dependencies \
-    apk del curl libstdc++ python3 py3-pip g++ make linux-headers
+        -C / etc/motd
