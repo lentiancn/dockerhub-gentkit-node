@@ -11,10 +11,10 @@ A project for building Docker image for the Node.js environment .
 
 | Image        | Tag             | Description                                                  |
 |--------------|-----------------|--------------------------------------------------------------|
-| gentkit/node | latest          | Same with **gentkit/node:latest-alpine**                     |
-| gentkit/node | latest-alpine   | Node.js vX.Y.Z(LTS/non-LTS) based on the latest Alpine Linux |
+| gentkit/node | lts-alpine      | Node.js vX.Y.Z(LTS/non-LTS) based on the latest Alpine Linux |
 | gentkit/node | ltsX-alpine     | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
 | gentkit/node | ltsX.Y.Z-alpine | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
+| gentkit/node | alpine          | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
 | gentkit/node | X-alpine        | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
 | gentkit/node | X.Y.Z-alpine    | Node.js vX.Y.Z(non-LTS) based on the latest Alpine Linux     |
 
@@ -22,7 +22,6 @@ A project for building Docker image for the Node.js environment .
 
 | Image        | Tag                   | Description                                                  |
 |--------------|-----------------------|--------------------------------------------------------------|
-| gentkit/node | unoff-latest          | Same with **gentkit/node:unoff-latest-alpine**               |
 | gentkit/node | unoff-lts-alpine      | Node.js vX.Y.Z(LTS/non-LTS) based on the latest Alpine Linux |
 | gentkit/node | unoff-ltsX-alpine     | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
 | gentkit/node | unoff-ltsX.Y.Z-alpine | Node.js vX.Y.Z(LTS) based on the latest Alpine Linux         |
