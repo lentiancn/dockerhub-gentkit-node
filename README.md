@@ -9,7 +9,7 @@ A project for building Docker image for the Node.js environment .
 
 ### Node.js from https://nodejs.org/
 
-[Dockerfile](../../tree/alpine)
+[Dockerfile](/blob/alpine)
 
 | Image        | Tag             | Description                                              |
 |--------------|-----------------|----------------------------------------------------------|
