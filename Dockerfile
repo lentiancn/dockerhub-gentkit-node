@@ -5,9 +5,10 @@
 #
 
 #
-# Use 'gentkit/alpine' as the base image with specified version
-# NOTE : If ALPINE_IMAGE_TAG is "unknown", cause the 'gentkit/alpine' base image to fail the build to ensure the correct version is referenced.
+# Stage 1 : Builder
 #
+## Use 'gentkit/alpine' as the base image with specified version
+## NOTE : If ALPINE_IMAGE_TAG is "unknown", cause the 'gentkit/alpine' base image to fail the build to ensure the correct version is referenced.
 ARG ALPINE_IMAGE_TAG="unknown"
 FROM gentkit/alpine:${ALPINE_IMAGE_TAG} AS builder
 
@@ -25,6 +26,9 @@ RUN set -eu && \
     # Install dependencies \
     apk add --no-cache libstdc++
 
+#
+# Stage 2 : Production
+#
 FROM scratch AS production
 
 #
